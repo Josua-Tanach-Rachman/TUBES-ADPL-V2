@@ -1,7 +1,7 @@
 package model;
-public class Car extends Vehicle {
-    // private boolean engineStatus = false;
-    // private boolean frontLampStatus = false;
+public class Car implements Vehicle {
+    private boolean engineStatus = false;
+    private boolean frontLampStatus = false;
 
     public void startEngine() {
         if(engineStatus == false){
@@ -70,5 +70,10 @@ public class Car extends Vehicle {
         else{
             System.out.println("Car front lamp already on!");
         }
+    }
+
+    @Override
+    public void display() {
+        System.out.println("Car is created");
     }
 }

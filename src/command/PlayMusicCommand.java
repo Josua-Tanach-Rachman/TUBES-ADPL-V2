@@ -1,7 +1,6 @@
 package command;
-
-import decorator.AirConditionerDecorator;
 import decorator.MP3Decorator;
+import decorator.VehicleDecorator;
 import model.Vehicle;
 
 public class PlayMusicCommand implements Command {
@@ -13,7 +12,14 @@ public class PlayMusicCommand implements Command {
 
     @Override
     public void execute() {
-        MP3Decorator vehicleMP3 = (MP3Decorator) vehicle;
-        vehicleMP3.playMusic();
+        if(vehicle instanceof VehicleDecorator){
+            VehicleDecorator decorator = (VehicleDecorator) vehicle;
+            decorator = (VehicleDecorator) decorator.getInnerVehicle();
+            vehicle = (MP3Decorator) decorator;
+        }
+        if(vehicle instanceof MP3Decorator){
+            MP3Decorator vehicleMP3 = (MP3Decorator) vehicle;
+            vehicleMP3.playMusic();
+        }
     }
 }

@@ -3,19 +3,11 @@ package decorator;
 
 import model.Vehicle;
 
-public abstract class VehicleDecorator extends Vehicle {
+public abstract class VehicleDecorator implements Vehicle{
     protected Vehicle vehicle;
 
     public VehicleDecorator(Vehicle vehicle) {
         this.vehicle = vehicle;
-    }
-
-    public void startEngine() {
-        vehicle.startEngine();
-    }
-
-    public void stopEngine() {
-        vehicle.stopEngine();
     }
 
     @Override
@@ -24,23 +16,28 @@ public abstract class VehicleDecorator extends Vehicle {
     }
 
     @Override
+    public void honk() {
+        vehicle.honk();
+    }
+
+    @Override
     public void reverse() {
         vehicle.reverse();
     }
 
     @Override
+    public void startEngine() {
+        vehicle.startEngine();
+    }
+
+    @Override
+    public void stopEngine() {
+        vehicle.stopEngine();
+    }
+
+    @Override
     public void turnLeft() {
         vehicle.turnLeft();
-    }
-
-    @Override
-    public void turnRight() {
-        vehicle.turnRight();
-    }
-
-    @Override
-    public void honk() {
-        vehicle.honk();
     }
 
     @Override
@@ -51,5 +48,14 @@ public abstract class VehicleDecorator extends Vehicle {
     @Override
     public void turnOnFrontLamp() {
         vehicle.turnOnFrontLamp();
+    }
+
+    @Override
+    public void turnRight() {
+        vehicle.turnRight();
+    }
+
+    public Vehicle getInnerVehicle() {
+        return this.vehicle;
     }
 }
