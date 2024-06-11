@@ -2,17 +2,14 @@ package main;
 import java.util.Scanner;
 import java.util.Vector;
 
-import command.Command;
-import command.RemoteControl;
-import command.StartEngineCommand;
-import command.StopEngineCommand;
-import decorator.AirConditionerDecorator;
-import decorator.MP3Decorator;
-import model.Car;
-import factory.CarFactory;
-import factory.TruckFactory;
-import model.Vehicle;
-import decorator.VehicleDecorator;
+import command.*;
+
+import decorator.*;
+
+import factory.*;
+
+import model.*;
+
 
 public class Main {
     public static Vector<String> modif;
@@ -26,6 +23,7 @@ public class Main {
         System.out.println("2. Pesan Truck");
 
         boolean loop = true;
+        String jenisVehicle = "";
         String jenis = "";
         Vehicle vehicle = new Car();
 
@@ -41,13 +39,13 @@ public class Main {
             if(action == 1){
                 vehicle = CarFactory.getVehicle();
                 System.out.println("Mobil telah dibuat");
-                jenis = "Mobil";
+                jenisVehicle = "Mobil";
                 loop = false;
             }
             else if(action == 2){
                 vehicle = TruckFactory.getVehicle();
                 System.out.println("Truck telah dibuat");
-                jenis = "Truck";
+                jenisVehicle = "Truck";
                 loop = false;
             }
             else{
@@ -65,7 +63,7 @@ public class Main {
         addBasicCommand();
 
         while(loop){
-            System.out.printf("Tambahkan fitur tambahan pada %s anda? (Y/N): ", jenis);
+            System.out.printf("Tambahkan fitur tambahan pada %s anda? (Y/N): ", jenisVehicle);
 
             yn = sc.next().charAt(0);
     
@@ -90,11 +88,11 @@ public class Main {
         Vector<String> modifYangDiinginkan = new Vector<>();
 
         modif = new Vector<>();
-        addModif();
+        addModifAvailable();
 
         //modifiikasi vehicle
         if(wantToModif == true){
-            while(loop && modif.size() > 0){
+            while(loop && modif.size() > 1){
                 showModif();
 
                 System.out.print("Pilih modifikasi : ");
@@ -111,15 +109,23 @@ public class Main {
                 if(modif.get(action) == "MP3"){
                     modifYangDiinginkan.add("MP3");
                     modif.remove("MP3");
+                    command.add("Nyalakan musik");
+                    command.add("Matikan musik");
                 }
                 else if(modif.get(action) == "Air Conditioner"){
                     modifYangDiinginkan.add("Air Conditioner");
                     modif.remove("Air Conditioner");
+                    command.add("Nyalakan AC");
+                    command.add("Matikan AC");
+                }
+                else if(modif.get(action) == "Batalkan memodifikasi"){
+                    loop = false;
+                    continue;
                 }
 
                 loop2 = true;
-                while(loop2 && modif.size() > 0){
-                    System.out.printf("Tambahkan fitur tambahan lainnya pada %s anda? (Y/N): ", jenis);
+                while(loop2 && modif.size() > 1){
+                    System.out.printf("Tambahkan fitur tambahan lainnya pada %s anda? (Y/N): ", jenisVehicle);
         
                     yn = sc.next().charAt(0);
             
@@ -141,8 +147,7 @@ public class Main {
         VehicleDecorator vd = null;
 
         for(int i = 0;i < modifYangDiinginkan.size();i++){
-            jenis = modifYangDiinginkan.firstElement();
-            modifYangDiinginkan.remove(0);
+            jenis = modifYangDiinginkan.get(i);
 
             if(jenis.equals("MP3")){
                 if(i == 0){
@@ -157,7 +162,7 @@ public class Main {
                     vd = new AirConditionerDecorator(vehicle);
                 }
                 else{
-                    vd = new MP3Decorator(vd);
+                    vd = new AirConditionerDecorator(vd);
                 }
             }
         }
@@ -165,51 +170,183 @@ public class Main {
         //bikin remote
         RemoteControl remote = new RemoteControl();
 
-        // Membuat command
-        Command startEngine;
-        Command stopEngine;
+        Vector<Command> commands = new Vector<>();
+
+        int ctrIdx = 9;
+        int idxMusic = 0;
+        int idxAc = 0;
         
         if(vd == null){
-            startEngine = new StartEngineCommand(vehicle);
-            stopEngine = new StopEngineCommand(vehicle);
+            commands.add(new StartEngineCommand(vehicle));
+            commands.add(new StopEngineCommand(vehicle));
+            commands.add(new TurnRightCommand(vehicle));
+            commands.add(new TurnLeftCommand(vehicle));
+            commands.add(new DriveCommand(vehicle));
+            commands.add(new ReverseCommand(vehicle));
+            commands.add(new HonkCommand(vehicle));
+            commands.add(new TurnOnFrontLamp(vehicle));
+            commands.add(new TurnOffFrontLamp(vehicle));
         }
         else{
-            startEngine = new StartEngineCommand(vd);
-            stopEngine = new StopEngineCommand(vd);
+            commands.add(new StartEngineCommand(vd));
+            commands.add(new StopEngineCommand(vd));
+            commands.add(new TurnRightCommand(vd));
+            commands.add(new TurnLeftCommand(vd));
+            commands.add(new DriveCommand(vd));
+            commands.add(new ReverseCommand(vd));
+            commands.add(new HonkCommand(vd));
+            commands.add(new TurnOnFrontLamp(vd));
+            commands.add(new TurnOffFrontLamp(vd));
+            for(int i = 0;i < modifYangDiinginkan.size();i++){
+                jenis = modifYangDiinginkan.get(i);
+
+                if(jenis.equals("MP3")){
+                    commands.add(new PlayMusicCommand(vd));
+                    commands.add(new StopMusicCommand(vd));
+                    idxMusic = ctrIdx;
+                    ctrIdx += 2;
+                }
+                else if(jenis.equals("Air Conditioner")){
+                    commands.add(new TurnOnACCommand(vd));
+                    commands.add(new TurnOffACCommand(vd));
+                    idxAc = ctrIdx;
+                    ctrIdx += 2;
+                }
+            }
         }
 
-
         loop = true;
+
+        command.add("Selesai");
+
+        boolean goToCommand = false;
+
         while(loop){
-            // Menjalankan command
-            System.out.println("LIST COMMAND YANG DAPAT DILAKUKAN");
-            System.out.println("1. Nyalakan mesin");
-            System.out.println("2. Matikan mesin");
-            System.out.println("3. Selesai");
-            System.out.print("Pilih aksi : ");
+            System.out.printf("Cek fitur - fitur pada %s anda? (Y/N): ", jenisVehicle);
 
-            action = sc.nextInt();
-
+            yn = sc.next().charAt(0);
+    
             System.out.println();
-
-            // Membuat kendaraan dengan metode factory
-            if(action == 1){
-                remote.setCommand(startEngine);
-                remote.pressButton();
+            if(yn == 'Y' || yn == 'y'){
+                loop = false;
+                goToCommand = true;
             }
-            else if(action == 2){
-                remote.setCommand(stopEngine);
-                remote.pressButton();
-            }
-            else if(action == 3){
-                break;
+            else if(yn == 'N' || yn == 'n'){
+                loop = false;
+                goToCommand = false;
             }
             else{
                 System.out.println("Aksi tidak valid");
             }
         }
 
+        loop = true;
+
+        if(goToCommand == true){
+            while(loop){
+                // Menjalankan command
+                showCommand();
+                System.out.print("Pilih aksi : ");
+    
+                action = sc.nextInt();
+    
+                System.out.println();
+    
+                
+                if(action == 1){
+                    remote.setCommand(commands.get(0));
+                    remote.pressButton();
+                }
+                else if(action == 2){
+                    remote.setCommand(commands.get(1));
+                    remote.pressButton();
+                }
+                else if(action == 3){
+                    remote.setCommand(commands.get(2));
+                    remote.pressButton();
+                }
+                else if(action == 4){
+                    remote.setCommand(commands.get(3));
+                    remote.pressButton();
+                }
+                else if(action == 5){
+                    remote.setCommand(commands.get(4));
+                    remote.pressButton();
+                }
+                else if(action == 6){
+                    remote.setCommand(commands.get(5));
+                    remote.pressButton();
+                }
+                else if(action == 7){
+                    remote.setCommand(commands.get(6));
+                    remote.pressButton();
+                }
+                else if(action == 8){
+                    remote.setCommand(commands.get(7));
+                    remote.pressButton();
+                }
+                else if(action == 9){
+                    remote.setCommand(commands.get(8));
+                    remote.pressButton();
+                }
+                else if(action - 1 == commands.size()){
+                    break;
+                }
+                else if(action <= 0 || action > commands.size()){
+                    System.out.println("Aksi tidak valid");
+                }
+                else if(modifYangDiinginkan.get(0).equals("MP3")){
+                    if(command.get(action - 1).equals("Nyalakan musik")){
+                        remote.setCommand(commands.get(idxMusic));
+                        remote.pressButton();
+                    }
+                    else if(command.get(action - 1).equals("Matikan musik")){
+                        remote.setCommand(commands.get(idxMusic+1));
+                        remote.pressButton();
+                    }
+                    
+                    else if(modifYangDiinginkan.size()==2){
+                        if(command.get(action - 1).equals("Nyalakan AC")){
+                            remote.setCommand(commands.get(idxAc));
+                            remote.pressButton();
+                        }
+                        else if(command.get(action - 1).equals("Matikan AC")){
+                            remote.setCommand(commands.get(idxAc + 1));
+                            remote.pressButton();
+                        }
+                    }
+                }
+                else{
+                    if(command.get(action - 1).equals("Nyalakan AC")){
+                        remote.setCommand(commands.get(idxAc));
+                        remote.pressButton();
+                    }
+                    else if(command.get(action - 1).equals("Matikan AC")){
+                        remote.setCommand(commands.get(idxAc + 1));
+                        remote.pressButton();
+                    }
+                    
+                    else if(modifYangDiinginkan.size() == 2){
+                        if(command.get(action - 1).equals("Nyalakan musik")){
+                            remote.setCommand(commands.get(idxMusic));
+                            remote.pressButton();
+                        }
+                        else if(command.get(action - 1).equals("Matikan musik")){
+                            remote.setCommand(commands.get(idxMusic+1));
+                            remote.pressButton();
+                        }
+                    }   
+                }
+            }
+        }
+
         System.out.println("TERIMA KASIH");
+    }
+
+    public static void addModifAvailable(){
+        modif.add("MP3");
+        modif.add("Air Conditioner");
+        modif.add("Batalkan memodifikasi");
     }
 
     public static void showModif(){
@@ -217,6 +354,10 @@ public class Main {
         int i;
         System.out.println("LIST MODIFIKASI YANG DAPAT DILAKUKAN");
         for(i = 0;i < modif.size();i++){
+            if(i == modif.size() - 1){
+                System.out.printf("%d. Batalkan memodifikasi\n", ctr);
+                break;
+            }
             System.out.printf("%d. Tambahkan %s.\n", ctr, modif.get(i));
             ctr++;
         }
@@ -225,14 +366,13 @@ public class Main {
     public static void addBasicCommand(){
         command.add("Nyalakan mesin");
         command.add("Matikan mesin");
+        command.add("Belok kanan");
+        command.add("Belok kiri");
+        command.add("Jalan");
+        command.add("Mundur");
         command.add("Bunyikan klakson");
         command.add("Nyalakan lampu depan");
         command.add("Matikan lampu depan");
-    }
-
-    public static void addModif(){
-        modif.add("MP3");
-        modif.add("Air Conditioner");
     }
 
     public static void showCommand(){
@@ -240,7 +380,7 @@ public class Main {
         int i;
         System.out.println("LIST COMMAND YANG DAPAT DILAKUKAN");
         for(i = 0;i < command.size();i++){
-            System.out.printf("%d. Tambahkan %s.\n", ctr, modif.get(i));
+            System.out.printf("%d. %s.\n", ctr, command.get(i));
             ctr++;
         }
     }

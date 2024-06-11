@@ -1,7 +1,7 @@
 package command;
 import model.Vehicle;
 
-class DriveCommand implements Command {
+public class DriveCommand implements Command {
     private Vehicle vehicle;
 
     public DriveCommand(Vehicle vehicle) {

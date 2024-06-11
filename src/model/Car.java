@@ -1,7 +1,7 @@
 package model;
 public class Car extends Vehicle {
-    private boolean engineStatus = false;
-    private boolean frontLampStatus = false;
+    // private boolean engineStatus = false;
+    // private boolean frontLampStatus = false;
 
     public void startEngine() {
         if(engineStatus == false){
@@ -24,11 +24,16 @@ public class Car extends Vehicle {
     }
 
     public void drive() {
-        System.out.println("Car is driving");
+        if (engineStatus)
+            System.out.println("Car is accelerating");
+        else System.out.println("Car engine is off");
+    
     }
+
     public void reverse() {
-        System.out.println("Car is reversing");
-        
+        if (engineStatus)
+            System.out.println("Car is reversing");
+        else System.out.println("Car engine is off");
     }
 
     public void turnLeft() {

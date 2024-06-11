@@ -1,7 +1,7 @@
 package command;
 import model.Vehicle;
 
-class TurnLeftCommand implements Command {
+public class TurnLeftCommand implements Command {
     private Vehicle vehicle;
 
     public TurnLeftCommand(Vehicle vehicle) {

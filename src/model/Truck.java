@@ -1,7 +1,7 @@
 package model;
 public class Truck extends Vehicle {
-    private boolean engineStatus = false;
-    private boolean frontLampStatus = false;
+    // private boolean engineStatus = false;
+    // private boolean frontLampStatus = false;
 
     public void startEngine() {
         if(engineStatus == false){

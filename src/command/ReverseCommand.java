@@ -1,7 +1,7 @@
 package command;
 import model.Vehicle;
 
-class ReverseCommand implements Command {
+public class ReverseCommand implements Command {
     private Vehicle vehicle;
 
     public ReverseCommand(Vehicle vehicle) {

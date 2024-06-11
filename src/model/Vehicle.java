@@ -1,6 +1,8 @@
 package model;
 
 public abstract class Vehicle {
+    protected boolean engineStatus;
+    protected boolean frontLampStatus;
     public abstract void startEngine();
     public abstract void stopEngine();
     public abstract void drive();

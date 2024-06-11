@@ -1,15 +1,16 @@
 package command;
+
 import model.Vehicle;
 
-public class TurnRightCommand implements Command {
+public class TurnOffFrontLamp implements Command {
     private Vehicle vehicle;
 
-    public TurnRightCommand(Vehicle vehicle) {
+    public TurnOffFrontLamp(Vehicle vehicle) {
         this.vehicle = vehicle;
     }
 
     @Override
     public void execute() {
-        vehicle.turnRight();
+        vehicle.turnOffFrontLamp();
     }
 }
