@@ -24,10 +24,14 @@ public class Truck implements Vehicle {
     }
 
     public void drive() {
-        System.out.println("Truck is driving");
+        if (engineStatus)
+            System.out.println("Truck is driving");
+        else System.out.println("Truck engine is off");
     }
     public void reverse() {
-        System.out.println("Truck is reversing");
+        if (engineStatus)
+            System.out.println("Truck is reversing");
+        else System.out.println("Truck engine is off");
         
     }
 
