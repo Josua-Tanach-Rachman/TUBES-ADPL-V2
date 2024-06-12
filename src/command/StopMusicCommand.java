@@ -1,5 +1,6 @@
 package command;
 
+import decorator.AirConditionerDecorator;
 import decorator.MP3Decorator;
 import decorator.VehicleDecorator;
 import model.Vehicle;
@@ -13,7 +14,7 @@ public class StopMusicCommand implements Command {
 
     @Override
     public void execute() {
-        if(vehicle instanceof VehicleDecorator){
+        if(vehicle instanceof AirConditionerDecorator){
             VehicleDecorator decorator = (VehicleDecorator) vehicle;
             decorator = (VehicleDecorator) decorator.getInnerVehicle();
             vehicle = (MP3Decorator) decorator;
