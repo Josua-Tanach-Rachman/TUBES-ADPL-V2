@@ -58,4 +58,11 @@ public abstract class VehicleDecorator implements Vehicle{
     public Vehicle getInnerVehicle() {
         return this.vehicle;
     }
+
+    @Override
+    public void display() {
+        vehicle.display();
+    }
+
+    
 }

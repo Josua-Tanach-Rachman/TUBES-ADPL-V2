@@ -38,13 +38,13 @@ public class Main {
             // Membuat kendaraan dengan metode factory
             if(action == 1){
                 vehicle = CarFactory.getVehicle();
-                System.out.println("Mobil telah dibuat");
+                vehicle.display();
                 jenisVehicle = "Mobil";
                 loop = false;
             }
             else if(action == 2){
                 vehicle = TruckFactory.getVehicle();
-                System.out.println("Truck telah dibuat");
+                vehicle.display();
                 jenisVehicle = "Truck";
                 loop = false;
             }
@@ -339,7 +339,12 @@ public class Main {
                 }
             }
         }
-
+        if(vd == null){
+            vehicle.display();
+        }
+        else{
+            vd.display();
+        }
         System.out.println("TERIMA KASIH");
     }
 

@@ -2,7 +2,6 @@ package decorator;
 import model.Vehicle;
 
 public class MP3Decorator extends VehicleDecorator {
-    Vehicle vehicle;
     boolean statusMusic = false;
 
     public MP3Decorator(Vehicle vehicle) {
@@ -31,7 +30,7 @@ public class MP3Decorator extends VehicleDecorator {
 
     @Override
     public void display() {
-        vehicle.display();
-        System.out.println("Ditambahkan dengan MP3");
+        this.vehicle.display();
+        System.out.println("Dimodifikasi dengan MP3");
     }
 }

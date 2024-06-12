@@ -2,7 +2,6 @@ package decorator;
 import model.Vehicle;
 
 public class AirConditionerDecorator extends VehicleDecorator {
-    Vehicle vehicle;
     boolean statusAC = false;
 
     public AirConditionerDecorator(Vehicle vehicle) {
@@ -32,7 +31,7 @@ public class AirConditionerDecorator extends VehicleDecorator {
 
     @Override
     public void display() {
-        vehicle.display();
-        System.out.println("Ditambahkan dengan AC");
+        this.vehicle.display();
+        System.out.println("Dimodifikasi dengan AC");
     }
 }
