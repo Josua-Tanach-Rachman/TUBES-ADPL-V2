@@ -45,7 +45,7 @@ public class Main {
             else if(action == 2){
                 vehicle = TruckFactory.getVehicle();
                 vehicle.display();
-                jenisVehicle = "Truck";
+                jenisVehicle = "Truk";
                 loop = false;
             }
             else{
@@ -345,6 +345,7 @@ public class Main {
         else{
             vd.display();
         }
+        sc.close();
         System.out.println("TERIMA KASIH");
     }
 

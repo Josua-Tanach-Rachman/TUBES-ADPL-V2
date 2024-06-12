@@ -5,75 +5,75 @@ public class Car implements Vehicle {
 
     public void startEngine() {
         if(engineStatus == false){
-            System.out.println("Car engine start");
+            System.out.println("Mesin mobil menyala");
             engineStatus = true;
         }
         else{
-            System.out.println("Car engine already on!");
+            System.out.println("Mesin mobil sudah menyala!");
         }
     }
 
     public void stopEngine() {
         if(engineStatus == true){
-            System.out.println("Car engine stop");  
+            System.out.println("Mesin mobil mati");  
             engineStatus = false;
         }
         else{
-            System.out.println("Car engine already off!");
+            System.out.println("Mesin mobil sudah mati!");
         }
     }
 
     public void drive() {
         if (engineStatus)
-            System.out.println("Car is accelerating");
-        else System.out.println("Car engine is off");
+            System.out.println("Mobil sedang melaju");
+        else System.out.println("Mesin mobil masih mati");
     
     }
 
     public void reverse() {
         if (engineStatus)
-            System.out.println("Car is reversing");
-        else System.out.println("Car engine is off");
+            System.out.println("Mobil berjalan mundur");
+        else System.out.println("Mesin mobil masih mati");
     }
 
     public void turnLeft() {
-        System.out.println("Car is turning left");
+        System.out.println("Mobil belok kiri");
 
     }
 
     public void turnRight() {
-        System.out.println("Car is turning right");
+        System.out.println("Mobil belok kanan");
     }
 
     @Override
     public void honk() {
-        System.out.println("Car is honking");
+        System.out.println("Mobil membunyikan klakson");
     }
 
     @Override
     public void turnOffFrontLamp() {
         if(frontLampStatus == true){
-            System.out.println("Car front lamp off");
+            System.out.println("Lampu depan mobil mati");
             frontLampStatus = false;
         }
         else{
-            System.out.println("Car front lamp already off!");
+            System.out.println("Lampu depan mobil sudah mati!");
         }
     }
 
     @Override
     public void turnOnFrontLamp() {
         if(frontLampStatus == false){
-            System.out.println("Car front lamp on");
+            System.out.println("Lampu depan mobil menyala");
             frontLampStatus = true;
         }
         else{
-            System.out.println("Car front lamp already on!");
+            System.out.println("Lampu depan mobil sudah menyala!");
         }
     }
 
     @Override
     public void display() {
-        System.out.println("Car is created");
+        System.out.println("Mobil berhasil dibuat");
     }
 }
